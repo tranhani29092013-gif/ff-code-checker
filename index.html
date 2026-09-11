@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FF Code Checker</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: white;
+      background: radial-gradient(circle at top, #451313, #100505 55%, #050505);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: #151515;
+      border: 1px solid #ff3b30;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 35px rgba(255, 59, 48, .25);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 50px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff453a;
+      margin: 10px 0;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #080808;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #ff453a;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #ff453a;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ff6258;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+    }
+
+    .valid {
+      display: block !important;
+      color: #6ff0a0;
+      background: rgba(40, 200, 100, .12);
+      border: 1px solid #35d477;
+    }
+
+    .invalid {
+      display: block !important;
+      color: #ff8179;
+      background: rgba(255, 60, 50, .12);
+      border: 1px solid #ff453a;
+    }
+
+    .demo {
+      margin-top: 25px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #0d0d0d;
+      color: #aaa;
+      line-height: 1.8;
+      font-size: 13px;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+
+    <div class="logo">🎮</div>
+
+    <h1>FF Code Checker</h1>
+
+    <p class="subtitle">
+      Công cụ kiểm tra mã DEMO
+    </p>
+
+    <label for="code">Nhập mã</label>
+
+    <input
+      id="code"
+      type="text"
+      placeholder="Nhập mã demo..."
+      autocomplete="off"
+    >
+
+    <button onclick="checkCode()">
+      🔍 Kiểm tra mã
+    </button>
+
+    <div id="result"></div>
+
+    <div class="demo">
+      <strong>Mã demo để thử:</strong><br>
+      FF-DEMO-2026<br>
+      PLAY-BOOST-123<br>
+      FF-CHECK-999
+    </div>
+
+    <footer>
+      Demo học tập — không yêu cầu mật khẩu hoặc OTP.
+    </footer>
+
+  </div>
+
+  <script>
+    async function checkCode() {
+      const code = document.getElementById("code").value.trim();
+      const result = document.getElementById("result");
+
+      result.className = "";
+      result.style.display = "none";
+
+      if (!code) {
+        result.textContent = "⚠️ Vui lòng nhập mã.";
+        result.className = "invalid";
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/check-code", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ code })
+        });
+
+        const data = await response.json();
+
+        if (data.valid) {
+          result.textContent = "✅ " + data.message;
+          result.className = "valid";
+        } else {
+          result.textContent = "❌ " + data.message;
+          result.className = "invalid";
+        }
+
+      } catch (error) {
+        result.textContent = "❌ Không kết nối được máy chủ.";
+        result.className = "invalid";
+      }
+    }
+
+    document.getElementById("code").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkCode();
+      }
+    });
+  </script>
+
+</body>
+</html>
+
