@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -17,8 +16,12 @@
       padding: 20px;
       font-family: Arial, sans-serif;
       color: #fff;
-      background:
-        radial-gradient(circle at top, #451313 0%, #100505 55%, #050505 100%);
+      background: radial-gradient(
+        circle at top,
+        #451313 0%,
+        #100505 55%,
+        #050505 100%
+      );
       display: flex;
       align-items: center;
       justify-content: center;
@@ -118,4 +121,103 @@
 
     .demo {
       margin-top: 25px;
-      padding
+      padding: 15px;
+      border-radius: 10px;
+      background: #0d0d0d;
+      color: #aaa;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .demo strong {
+      color: #fff;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="logo">🎮</div>
+
+    <h1>FF Code Checker</h1>
+
+    <div class="subtitle">
+      Kiểm tra mã Free Fire nhanh chóng
+    </div>
+
+    <label for="code">Nhập mã</label>
+
+    <input
+      id="code"
+      type="text"
+      placeholder="Ví dụ: FF-DEMO-2026"
+      autocomplete="off"
+    >
+
+    <button id="checkButton">
+      🔍 Kiểm tra mã
+    </button>
+
+    <div id="result"></div>
+
+    <div class="demo">
+      <strong>Mã demo để thử:</strong><br>
+      FF-DEMO-2026<br>
+      PLAY-BOOST-123<br>
+      FF-CHECK-999
+    </div>
+
+    <footer>
+      Demo học tập — không yêu cầu mật khẩu hoặc OTP.
+    </footer>
+  </div>
+
+  <script>
+    const validCodes = {
+      "FF-DEMO-2026": "Mã hợp lệ 🎉",
+      "PLAY-BOOST-123": "Mã hợp lệ 🎉",
+      "FF-CHECK-999": "Mã hợp lệ 🎉"
+    };
+
+    const input = document.getElementById("code");
+    const button = document.getElementById("checkButton");
+    const result = document.getElementById("result");
+
+    function checkCode() {
+      const code = input.value.trim().toUpperCase();
+
+      result.className = "";
+
+      if (!code) {
+        result.textContent = "⚠️ Vui lòng nhập mã.";
+        result.className = "invalid";
+        return;
+      }
+
+      if (validCodes[code]) {
+        result.textContent = "✅ " + validCodes[code];
+        result.className = "valid";
+      } else {
+        result.textContent = "❌ Mã không hợp lệ hoặc không tồn tại.";
+        result.className = "invalid";
+      }
+    }
+
+    button.addEventListener("click", checkCode);
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkCode();
+      }
+    });
+  </script>
+</body>
+</html>
+
